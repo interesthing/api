@@ -1,19 +1,16 @@
 {
   "name": "interesthing",
-  "version": "1.0.0",
-  "description": "Mr.Oulevay API \u001b\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C POI API\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[DA POI API",
-  "main": "index.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "keywords": [
-    "POI",
-    "API"
-  ],
-  "author": "Steve Maibach & Pedro Garcia & Audric Dubuis",
-  "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "mongodb": "^3.3.2"
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1"
   }
 }
