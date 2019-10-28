@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
+
 mongoose.connect('mongodb://localhost/db-interesthings');
+
 
 var createError = require('http-errors');
 var express = require('express');
@@ -12,6 +14,20 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+app.use(function myMiddleware(req, res, next) {
+  console.log('Hello World!');
+  next();
+});
+
+//Exemple de route
+app.use('/hello', function hello(req, res, next) {
+  res.send('world');
+});
+
+app.post('/ping', function ping(req, res, next) {
+  res.send('pong');
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
