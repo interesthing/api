@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/my-database-name');
+
+mongoose.connect('mongodb://localhost/db-interesthings');
+
 
 var createError = require('http-errors');
 var express = require('express');
