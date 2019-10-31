@@ -12,22 +12,10 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var poisRouter = require('./routes/pois');
 
 var app = express();
 
-app.use(function myMiddleware(req, res, next) {
-  console.log('Hello World!');
-  next();
-});
-
-//Exemple de route
-app.use('/hello', function hello(req, res, next) {
-  res.send('world');
-});
-
-app.post('/ping', function ping(req, res, next) {
-  res.send('pong');
-});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/pois', poisRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
