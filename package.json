@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "apidoc": "apidoc -i routes -o docs",
     "dev": "nodemon",
     "start": "node ./bin/www"
   },
@@ -15,5 +16,8 @@
     "mongodb": "^3.3.2",
     "mongoose": "^5.7.4",
     "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "apidoc": "^0.17.7"
   }
 }
