@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
   User.find().sort('username').exec(function(err, users) {
     if (err) {
       return next(err);
-    } 
+    }
     res.send(users);
   });
 });
