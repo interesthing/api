@@ -15,20 +15,6 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-app.use(function myMiddleware(req, res, next) {
-  console.log('Hello World!');
-  next();
-});
-
-//Exemple de route
-app.use('/hello', function hello(req, res, next) {
-  res.send('world');
-});
-
-app.post('/ping', function ping(req, res, next) {
-  res.send('pong');
-});
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');

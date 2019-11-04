@@ -22,8 +22,7 @@ const userSchema = new Schema({
     required: true
   },
   imgProfil: {
-    type: String,
-    unique: true
+    type: String
   }
 });
 // Create the model from the schema and export it
