@@ -12,19 +12,16 @@ const ratingSchema = new Schema({
   poi: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Poi',
-    unique: true,
     required: true
   },
   value: {
   	type: Number, // Type validation
     required: true, // Mandatory
-    unique: true,
     minlength: [ 1, 'Rate cant be under 1' ], // Minimum length
     maxlength: [ 5, 'Rate cant be upper 5']
 	},
   comment: {
-  	type: String, 
-  	unique: true,
+  	type: String,
     minlength: [ 5, 'Comment is too short' ], // Minimum length
     maxlength: [300, 'Comment is too long']
   },
