@@ -4,7 +4,7 @@ const Rate = require('../models/rating');
 
 /* GET rating listing. */
 router.get('/', function(req, res, next) {
-  Rate.find().sort('_id').exec(function(err, ratings) {
+  User.find().sort('name').exec(function(err, ratings) {
     if (err) {
       return next(err);
     }
