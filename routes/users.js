@@ -75,16 +75,27 @@ router.put('/:id', loadUserFromParams, function(req, res, next) {
 // Modifier partiellement un utilisateur //
 
 router.patch('/:id', loadUserFromParams, function(req, res, next) {
-  	req.user = req.body; 
-  	/* Contient :
-  	{"username": "abc",
-    "email":     "abc",
-    "password":  "abc",
-    "imgProfil": "abc"}*/
+	
+	//Mets à jour l'utilisateur en fonction des params présents ou non dans req.body 
+  if (req.body.username !== undefined) {
+    req.user.username = req.body.username;
+  }
+  if (req.body.email !== undefined) {
+   	req.user.email = req.body.email;
+  }
+  if (req.body.password !== undefined) {
+    req.user.password = req.body.password;
+  }
+  if (req.body.imgProfil !== undefined) {
+    req.user.imgProfil = req.body.imgProfil;
+  }
 
-  req.user.save(function(err, updatedUser) {
-    if (err) { return next(err); }
-    res.send(updateUser);
+  req.user.save(function(err, modifiedPerson) {
+    if (err) {
+      return next(err);
+    }
+    //debug(`Updated person "${modifiedPerson.name}"`);
+    res.send(modifiedPerson);
   });
 });
 
