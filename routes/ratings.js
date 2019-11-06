@@ -49,9 +49,34 @@ router.post('/', function(req, res, next) {
     });
   });
 
-// PUT /api/ratings/:id
-router.put('/ratings/:id', function(req, res, next) {
-  
-})
+/* Routes en PATCH */
+
+// Modifier un commentaire
+router.patch('/:id', loadRateFromParams, function(req, res, next) {
+	
+	// Met à jour le commentaire du rating en fonction des params présents ou non dans req.body 
+  if (req.body.comment !== undefined) {
+    req.rate.comment = req.body.comment;
+  }
+
+  req.rate.save(function(err, modifiedRate) {
+    if (err) {
+      return next(err);
+    }
+    //debug(`Updated rate "${modifiedRate.comment}"`);
+    res.send(modifiedRate);
+  });
+});
+
+/* Routes en DELETE */
+
+// Supprimer un rating
+router.delete('/:id', loadRateFromParams, function(req, res, next) {
+  req.rate.remove(function(err) {
+    if (err) { return next(err); }
+    res.sendStatus(204);
+  });
+});
+
 
 module.exports = router;
