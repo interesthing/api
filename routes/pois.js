@@ -118,7 +118,54 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/:id', loadPoisFromParams, function(req, res, next) {
-	res.send(req.poi);
+
+	    Poi.aggregate([
+	    	  {
+    		$match: { _id: req.poi._id }
+  			},
+      {
+        $lookup: {
+          from: 'ratings',
+          localField: '_id',
+          foreignField: 'poi',
+          as: 'ratingPoi'
+        }
+      },
+      {
+        $unwind: {
+        	path: '$ratingPoi',
+        	preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+      	// regrouper 
+        $group: {
+          _id: '$_id',
+          postedBy: { "$first": '$postedBy' }, 
+          pos: { "$first": '$pos' }, 
+          photos: { "$first": '$photos' }, 
+          title: { "$first": '$title' }, 
+          description: { "$first": '$description' }, 
+          dateAdd: { "$first": '$dateAdd' }, 
+          categorie: { "$first": '$categorie' }, 
+          averageRating: { $avg: "$ratingPoi.value" }
+        }
+      }
+      ],
+      (err, poiWithRating) => {
+      if (err) {
+        return next(err);
+      }
+
+res.send(poiWithRating.map(poi => {
+
+        const serialized = new Poi(poi).toJSON();
+
+        serialized.ratingPoi = poi.averageRating;
+
+        return serialized;
+      }));
+  	});
 });
 
 router.delete('/:id', loadPoisFromParams, function(req, res, next) {
