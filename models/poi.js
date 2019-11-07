@@ -23,12 +23,10 @@ const poiSchema = new Schema({
   }],
   title: {
     type: String,
-    unique: true,
     required: true
   },
   description: {
   	type: String, 
-  	unique: true,
     minlength: [ 5, 'Description is too short' ], // Minimum length
     maxlength: [300, 'Description is too long']
   },
