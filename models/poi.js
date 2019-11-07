@@ -6,7 +6,6 @@ const poiSchema = new Schema({
   postedBy: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User',
-    unique: true,
     required: true
   },
   pos: {

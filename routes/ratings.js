@@ -30,7 +30,6 @@ router.get('/:id', loadRateFromParams, function(req, res, next) {
   res.send(req.rate);
  });
 
-// add filter route here GET /api/ratings/filter
 
 // POST api/ratings
 router.post('/', function(req, res, next) {
@@ -78,5 +77,29 @@ router.delete('/:id', loadRateFromParams, function(req, res, next) {
   });
 });
 
+/* FILTER */
+
+// GET /api/ratings
+router.get('/', function(req, res, next) {
+  let query = Rate.find();
+  // Filter ratings by comments
+  if (ObjectId.isValid(req.query.ratings)) {
+    query = query.where('comment').equals(req.query.comment);
+  }
+  // Limit pois to only those with a good enough rating
+  //if (!isNaN(req.query.ratedAtLeast)) {
+  //  query = query.where('rating').gte(req.query.ratedAtLeast);
+  //}
+  // Execute the query
+  query.exec(function(err, comments) {
+    if (err) {
+      return next(err);
+    }
+    res.send(comments);
+  });
+});
 
 module.exports = router;
+
+// tous les ratings qu'un utilisateur a posté
+// tous les ratings appartenant à un poi
