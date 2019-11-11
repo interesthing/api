@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 
-mongoose.connect('mongodb://localhost/db-interesthings');
-
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/db-interesthings', {
+  // <PREVIOUS OPTIONS HERE...>
+  useCreateIndex: true
+});
 
 var createError = require('http-errors');
 var express = require('express');
@@ -21,7 +23,11 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(logger('dev'));
+// Log requests (except in test mode).
+if (process.env.NODE_ENV !== 'test') {
+  app.use(logger('dev'));
+}
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
