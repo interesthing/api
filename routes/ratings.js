@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const Rate = require('../models/rating');
+const { notifyCount } = require('../dispatcher');
 
 // Middleware GET api/ratings/:id
 function loadRateFromParams(req, res, next) {
@@ -34,13 +35,17 @@ router.get('/:id', loadRateFromParams, function(req, res, next) {
 
 // POST api/ratings
 router.post('/', function(req, res, next) {
+
+    
+
     new Rate(req.body).save(function(err, savedRate) {
       if (err) {
         return next(err);
       }
   
       //debug(Created rate "${savedRate.rate}");
-  
+      notifyCount();
+
       res
         .status(201)
         // Rajouter le ${config.baseUrl} //
@@ -72,8 +77,14 @@ router.patch('/:id', loadRateFromParams, function(req, res, next) {
 
 // Supprimer un rating
 router.delete('/:id', loadRateFromParams, function(req, res, next) {
+
+  
+
   req.rate.remove(function(err) {
     if (err) { return next(err); }
+
+    notifyCount(); 
+    
     res.sendStatus(204);
   });
 });

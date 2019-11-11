@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 
 mongoose.connect('mongodb://localhost/db-interesthings');
+mongoose.set('debug', true);
 
 
 var createError = require('http-errors');

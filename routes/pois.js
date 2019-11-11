@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const Poi = require('../models/poi');
+const Rating = require('../models/rating')
+const { notifyCount } = require('../dispatcher');
 
 function loadPoisFromParams(req, res, next) {
   Poi.findById(req.params.id).exec(function(err, poi) {
@@ -14,8 +16,7 @@ function loadPoisFromParams(req, res, next) {
   });
 }
 
-/* agrégation faites 
-PAGINATION à faire ! */
+
 router.get('/', function(req, res, next) {
 
 
@@ -103,10 +104,14 @@ router.get('/', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
 
+	
+
 	new Poi(req.body).save(function(err, savedPoi) {
     if (err) {
       return next(err);
     }
+
+    notifyCount();
 
     res
       .status(201)
@@ -114,6 +119,8 @@ router.post('/', function(req, res, next) {
       .send(savedPoi);
   });
 	
+
+
 
 });
 
@@ -169,12 +176,23 @@ res.send(poiWithRating.map(poi => {
 });
 
 router.delete('/:id', loadPoisFromParams, function(req, res, next) {
+
+	let poiId = req.params.id;
+	console.log(poiId);
+
+	Rating.deleteMany({poi:poiId}, function(err) {
+
     req.poi.remove(function(err) {
       if (err) {
         return next(err);
       }
-     res.sendStatus(204);
+
+    notifyCount();
+
+    res.sendStatus(204);
       });
+
+	})
 });
 
 router.patch('/:id', loadPoisFromParams, function(req, res, next) {
