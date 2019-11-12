@@ -40,7 +40,7 @@ function authenticate(req, res, next) {
   const token = match[1];
   jwt.verify(token, secretKey, function(err, payload) {
     if (err) {
-      return res.status(401).send('Votre token est invalide ou a expiré.');
+      return res.status(401).send('Votre token(JsonWebToken) est invalide ou a expiré.');
     } else {
       req.currentUserId = payload.sub;
       // Passe l'ID de l'utilisateur authentifié au prochain middleware
@@ -116,8 +116,6 @@ router.post('/login', function(req, res, next) {
 	      } else if (!valid) {
 	        return res.sendStatus(401);
 	      }
-	      // Si le login est validé
-	      //res.send(`Welcome ${user.username}!`);
 
 		  // Genère le JWT (JsonWebToken), ici pour une durée de 7 jours
 	      const exp = (new Date().getTime() + 7 * 24 * 3600 * 1000) / 1000;
@@ -145,16 +143,27 @@ router.put('/:id', authenticate, loadUserFromParams, function(req, res, next){
       return res.status(403).send('Vous n\'avez pas le droit de modification(PUT) sur cette ressource.')
     }
 
+    // Config bcrypt
+	const plainPassword = req.body.password;
+  	const saltRounds = 10;
+
+  	// Hachage
+  	bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
+	    if (err) {
+	      return next(err);
+	    }
+
+	req.user.password = hashedPassword;
 	req.user.username = req.body.username;
 	req.user.email = req.body.email;
-	req.user.password = req.body.password;
 	req.user.imgProfil = req.body.imgProfil;
 
 	req.user.save(function(err, updatedUser){
-	if (err) {
+	if (err){
 		      return next(err);
 		    }
 		    res.send(updatedUser);
+	    });
   	});
 });
 
@@ -169,26 +178,48 @@ router.patch('/:id', authenticate, loadUserFromParams, function(req, res, next) 
       return res.status(403).send('Vous n\'avez pas le droit de modification partielle (PATCH) sur cette ressource.')
     }
 	
-	//Mets à jour l'utilisateur en fonction des params présents ou non dans req.body 
+	// Mets à jour l'utilisateur en fonction des params présents ou non dans req.body 
 	  if (req.body.username !== undefined) {
 	    req.user.username = req.body.username;
 	  }
+
 	  if (req.body.email !== undefined) {
 	   	req.user.email = req.body.email;
 	  }
-	  if (req.body.password !== undefined) {
-	    req.user.password = req.body.password;
-	  }
+
 	  if (req.body.imgProfil !== undefined) {
 	    req.user.imgProfil = req.body.imgProfil;
 	  }
 
-  req.user.save(function(err, modifiedPerson) {
-    if (err) {
-      return next(err);
-    }
-    res.send(modifiedPerson);
-  });
+	  if (req.body.password !== undefined) {
+	  	// Config bcrypt
+		const plainPassword = req.body.password;
+	  	const saltRounds = 10;
+
+	  	// Hachage
+	  	bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
+		    if (err) {
+		     	return next(err);
+		    }
+	   	 	req.user.password = hashedPassword;
+	  		
+			req.user.save(function(err, modifiedPerson){
+		    	if (err) {
+		      		return next(err);
+		    	}
+		    res.send(modifiedPerson);
+
+		  	});
+	  	});
+	  }else{
+
+	  	req.user.save(function(err, modifiedPerson){
+	    if (err) {
+	      return next(err);
+	    }
+	    res.send(modifiedPerson);
+	  });
+  	}
 });
 
 /* Routes en DELETE */

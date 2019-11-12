@@ -1,22 +1,72 @@
 var express = require('express');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 var router = express.Router();
 const Poi = require('../models/poi');
 const Rating = require('../models/rating')
 const { notifyCount } = require('../dispatcher');
+const User = require('../models/user');
+const secretKey = process.env.SECRET_KEY || 'changeme';
 
+
+/* Les middlewares */
+
+// Middleware récupérant les informations d'un POI
 function loadPoisFromParams(req, res, next) {
   Poi.findById(req.params.id).exec(function(err, poi) {
     if (err) {
       return next(err);
     } else if (!poi) {
-      return res.status(404).send('No poi found with ID ' + req.params.id);
+      return res.status(404).send('Aucun POI trouvé pour l\'ID ' + req.params.id);
     }
     req.poi = poi;
     next();
   });
 }
 
+// Middleware pour l'authentification
+function authenticate(req, res, next) {
 
+  // Contrôle si le header est présent 
+  const authorization = req.get('Authorization');
+  if (!authorization) {
+    return res.status(401).send('Le header d\'autorisation est manquant.');
+  }
+
+  // Contrôle que le header soit au bon format
+  const match = authorization.match(/^Bearer (.+)$/);
+  if (!match) {
+    return res.status(401).send('Le header d\'autorisation n\est pas au bon format (bearer token)');
+  }
+
+  // Extraction et vérification du JWT
+  const token = match[1];
+  jwt.verify(token, secretKey, function(err, payload) {
+    if (err) {
+      return res.status(401).send('Votre token(JsonWebToken) est invalide ou a expiré.');
+    } else {
+      req.currentUserId = payload.sub;
+      // Passe l'ID de l'utilisateur authentifié au prochain middleware
+      next(); 
+    }
+  });
+}
+
+// Middleware pour récupérer les informations d'un utilisateur 
+function loadUserFromParams(req, res, next) {
+  User.findById(req.params.id).exec(function(err, user) {
+    if (err) {
+      return next(err);
+    } else if (!user) {
+      return res.status(404).send('Aucun utilisateur trouvé pour l\'ID : ' + req.params.id);
+    }
+    req.user = user;
+    next();
+  });
+}
+
+/* agrégation faites 
+PAGINATION à faire ! */
 router.get('/', function(req, res, next) {
 
 
@@ -102,11 +152,10 @@ router.get('/', function(req, res, next) {
 
 });
 
-router.post('/', function(req, res, next) {
+router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
 
-	
+    new Poi(req.body).save(function(err, savedPoi) {
 
-	new Poi(req.body).save(function(err, savedPoi) {
     if (err) {
       return next(err);
     }
@@ -174,11 +223,15 @@ res.send(poiWithRating.map(poi => {
       }));
   	});
 });
+    
+router.delete('/:id', authenticate, loadPoisFromParams, function(req, res, next) {
 
-router.delete('/:id', loadPoisFromParams, function(req, res, next) {
-
-	let poiId = req.params.id;
-	console.log(poiId);
+    // Contrôle des autorisations : l'utilisateur doit avoir créer le POI pour le supprimer //
+    if (req.currentUserId !== req.poi.postedBy.toString()){
+      return res.status(403).send('Vous devez avoir créé ce POI pour le supprimer.')
+    }
+  
+  let poiId = req.params.id;
 
 	Rating.deleteMany({poi:poiId}, function(err) {
 
@@ -195,43 +248,55 @@ router.delete('/:id', loadPoisFromParams, function(req, res, next) {
 	})
 });
 
-router.patch('/:id', loadPoisFromParams, function(req, res, next) {
+router.patch('/:id', authenticate, loadPoisFromParams, function(req, res, next) {
+
+  // Contrôle des autorisations : l'utilisateur doit avoir créer le POI pour le modifier //
+  if (req.currentUserId !== req.poi.postedBy.toString()){
+    return res.status(403).send('Vous devez avoir créé ce POI pour le modifier (PATCH).')
+  }
+
  	if (req.body.photos !== undefined) {
     req.poi.photos = req.body.photos;
-  	}
+	}
 	if (req.body.title !== undefined) {
     req.poi.title = req.body.title;
-  	}
+	}
 	if (req.body.description !== undefined) {
     req.poi.description = req.body.description;
-  	}
+	}
 	if (req.body.categorie !== undefined) {
     req.poi.categorie = req.body.categorie;
-  	}
+	}
 	if (req.body.pos !== undefined) {
 		return res.status(404).send('This element cannot be changed');
-  	}
-  	req.poi.save(function(err, savedPoi) {
-    if (err) {
+	}
+
+	req.poi.save(function(err, savedPoi) {
+  if (err) {
       return next(err);
-    }
+  }
     res.send(savedPoi);
   });
 });
 
-router.put('/:id', loadPoisFromParams, function(req, res, next) {
+router.put('/:id', authenticate, loadPoisFromParams, function(req, res, next) {
 
-  	req.poi.photos = req.body.photos;
+   // Contrôle des autorisations : l'utilisateur doit avoir créer le POI pour le modifier //
+  if (req.currentUserId !== req.poi.postedBy.toString()){
+    return res.status(403).send('Vous devez avoir créé ce POI pour le modifier (PUT).')
+  }
+
+  req.poi.photos = req.body.photos;
 	req.poi.title = req.body.title;
 	req.poi.description = req.body.description;
 	req.poi.categorie = req.body.categorie;
 
-  	req.poi.save(function(err, savedPoi) {
-    if (err) {
+  req.poi.save(function(err, savedPoi) {
+  if (err) {
       return next(err);
-    }
+  }
 
-    res.send(savedPoi);
+  res.send(savedPoi);
 
 });
 
