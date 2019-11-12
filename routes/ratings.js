@@ -3,6 +3,7 @@ var router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Rate = require('../models/rating');
+const { notifyCount } = require('../dispatcher');
 const User = require('../models/user');
 const secretKey = process.env.SECRET_KEY || 'changeme';
 
@@ -20,7 +21,6 @@ function loadUserFromParams(req, res, next) {
     next();
   });
 }
-
 
 // Middleware GET api/ratings/:id
 function loadRateFromParams(req, res, next) {
@@ -95,12 +95,15 @@ router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
     if (err) {
       return next(err);
     }
-
+    
+    notifyCount();
+    
     res
       .status(201)
       // Rajouter le ${config.baseUrl} //
       .set('Location', `/ratings/${savedRate._id}`)
       .send(savedRate);
+
     });
   });
 
@@ -139,6 +142,9 @@ router.delete('/:id', authenticate, loadRateFromParams, function(req, res, next)
   
   req.rate.remove(function(err) {
     if (err) { return next(err); }
+
+    notifyCount(); 
+    
     res.sendStatus(204);
   });
 });

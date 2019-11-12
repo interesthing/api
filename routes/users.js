@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 var router = express.Router();
 const User = require('../models/user');
 const secretKey = process.env.SECRET_KEY || 'changeme';
+const { notifyCount } = require('../dispatcher');
 
 /* Les middlewares */
 
@@ -84,10 +85,12 @@ router.post('/', function(req, res, next) {
 	    const newUser = new User(req.body);
 	    newUser.password = hashedPassword;
 	    newUser.save(function(err, savedUser) {
+
 		      if (err) {
 		        return next(err);
 		      }
 
+		    notifyCount(); 
 		    res.status(201)
 		      	// Rajouter le ${config.baseUrl} //
 		      	.set('Location', `/users/${savedUser._id}`)
@@ -231,6 +234,7 @@ router.delete('/:id', authenticate, loadUserFromParams, function(req, res, next)
 
   	req.user.remove(function(err) {
     if (err) { return next(err); }
+    	notifyCount(); 
     	res.sendStatus(204);
   });
 });

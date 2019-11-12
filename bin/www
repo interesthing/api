@@ -7,56 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('interesthing:server');
 var http = require('http');
-
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-// Define a schema
-const blogSchema = new Schema({
-  title: String,
-  body: String,
-  date: { type: Date, default: Date.now  }, // Default value
-  comments: [ // Nested array of documents
-    {
-      body: String,
-      date: Date
-    }
-  ],
-  meta: { // Nested document
-    votes: Number,
-    favs: Number
-  }
-});
-mongoose.model('Blog', blogSchema);
-// Retrieve the model from another file
-const Blog = mongoose.model('Blog');
-// Create a document with it
-let blog = new Blog({
-  title: 'Teaching Mongoose',
-  body: 'So cool',
-  comments: [
-    { body: 'orly?', date: new Date(2015, 10, 20, 15, 14) },
-    { body: 'yarly', date: new Date(2015, 10, 20, 15, 17) }
-  ],
-  meta: {
-    votes: 0,
-    favs: 3
-  }
-});
-
-
-blog.save(function(err) { // This will insert a new document
-  if (err) {
-    return console.warn('Could not save blog because: ' + err.message);
-  }
-  console.log('Saved blog');
-  blog.meta.votes = 5; // Update something
-  blog.save(function(err, updatedBlog) { // This will update the document
-    if (err) {
-      return console.warn('Could not save blog because: ' + err.message);
-    }
-    console.log('Updated blog');
-  });
-});
+const { createBackendDispatcher } = require('../dispatcher');
 
 /**
  * Get port from environment and store in Express.
@@ -70,6 +21,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+createBackendDispatcher(server);
 
 /**
  * Listen on provided port, on all network interfaces.

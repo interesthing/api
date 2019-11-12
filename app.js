@@ -2,9 +2,10 @@ const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/db-interesthings', {
-  // <PREVIOUS OPTIONS HERE...>
   useCreateIndex: true
 });
+
+mongoose.set('debug', true);
 
 var createError = require('http-errors');
 var express = require('express');

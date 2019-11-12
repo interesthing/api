@@ -3,8 +3,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 var router = express.Router();
 const Poi = require('../models/poi');
+const Rating = require('../models/rating')
+const { notifyCount } = require('../dispatcher');
 const User = require('../models/user');
 const secretKey = process.env.SECRET_KEY || 'changeme';
+
 
 /* Les middlewares */
 
@@ -152,9 +155,12 @@ router.get('/', function(req, res, next) {
 router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
 
     new Poi(req.body).save(function(err, savedPoi) {
+
     if (err) {
       return next(err);
     }
+
+    notifyCount();
 
     res
       .status(201)
@@ -162,6 +168,8 @@ router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
       .send(savedPoi);
   });
 	
+
+
 
 });
 
@@ -215,20 +223,29 @@ res.send(poiWithRating.map(poi => {
       }));
   	});
 });
-
+    
 router.delete('/:id', authenticate, loadPoisFromParams, function(req, res, next) {
 
     // Contrôle des autorisations : l'utilisateur doit avoir créer le POI pour le supprimer //
     if (req.currentUserId !== req.poi.postedBy.toString()){
       return res.status(403).send('Vous devez avoir créé ce POI pour le supprimer.')
     }
+  
+  let poiId = req.params.id;
+
+	Rating.deleteMany({poi:poiId}, function(err) {
 
     req.poi.remove(function(err) {
       if (err) {
         return next(err);
       }
-     res.sendStatus(204);
+
+    notifyCount();
+
+    res.sendStatus(204);
       });
+
+	})
 });
 
 router.patch('/:id', authenticate, loadPoisFromParams, function(req, res, next) {
