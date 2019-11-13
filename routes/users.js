@@ -226,12 +226,12 @@ router.patch('/:id', authenticate, loadUserFromParams, function(req, res, next) 
 
 // Supprimer un utilisateur (Authentification & ne peut que se supprimer lui-même)//
 router.delete('/:id', authenticate, loadUserFromParams, function(req, res, next) {
-
+	
 	// Contrôle des autorisations : l'utilisateur ne peut que se modifier lui-même
     if (req.currentUserId !== req.user._id.toString()){
       return res.status(403).send('Vous n\'avez pas le droit de suppression (DELETE) sur cette ressource.')
     }
-
+	
   	req.user.remove(function(err) {
     if (err) { return next(err); }
     	notifyCount(); 

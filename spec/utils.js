@@ -1,6 +1,6 @@
 const User = require('../models/user');
 
-exports.cleanUpDatabase = async function() {
+exports.cleanUpUserDatabase = async function() {
   await Promise.all([
     User.deleteMany()
   ]);
