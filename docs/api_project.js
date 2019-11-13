@@ -1,16 +1,1 @@
-define({
-  "name": "Interesting-API-Doc",
-  "version": "1.0.0",
-  "description": "It is awesome",
-  "title": "Interesting",
-  "url": "https://example.com",
-  "sampleUrl": false,
-  "defaultVersion": "0.0.0",
-  "apidoc": "0.3.0",
-  "generator": {
-    "name": "apidoc",
-    "time": "2019-10-31T09:01:15.227Z",
-    "url": "http://apidocjs.com",
-    "version": "0.17.7"
-  }
-});
+define({  "name": "Interesthing Api REST",  "version": "1.0.0",  "description": "A nice project for ArchioWeb HEIG-VD course",  "title": "Interesthing Api REST",  "url": "http://localhost:3000",  "sampleUrl": false,  "defaultVersion": "0.0.0",  "apidoc": "0.3.0",  "generator": {    "name": "apidoc",    "time": "2019-11-13T17:20:27.608Z",    "url": "http://apidocjs.com",    "version": "0.17.7"  }});
