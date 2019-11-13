@@ -1,7 +1,7 @@
 {
-  "name": "Interesting-API-Doc",
+  "name": "Interesthing Api REST",
   "version": "1.0.0",
-  "description": "It is awesome",
-  "title": "Interesting",
-  "url" : "https://example.com"
+  "description": "A nice project for ArchioWeb HEIG-VD course",
+  "title": "Interesthing Api REST",
+  "url" : "http://localhost:3000"
 }
