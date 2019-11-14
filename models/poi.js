@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-// Define the schema for users
+
+
+function validateGeoJsonCoordinates(value) {
+  return Array.isArray(value) && value.length >= 2 && value.length <= 3 && value[0] >= -180 && value[0] <= 180 && value[1] >= -90 && value[1] <= 90;
+}
+
+// Define the schema for Poi
 const poiSchema = new Schema({
 
   postedBy: {
@@ -11,12 +17,17 @@ const poiSchema = new Schema({
   pos: {
     type: {
       type: String,
-      required: true
+      required: true,
+      enum: [ 'Point' ]
     },
     coordinates: {
       type: [Number],
-      required: true
+      required: true,
+      validate: {
+        validator: validateGeoJsonCoordinates,
+        message: '{VALUE} is not a valid longitude/latitude(/altitude) coordinates array'
       }
+    }
   },
   photos: [{
     type: String,
@@ -40,5 +51,8 @@ const poiSchema = new Schema({
   }
 
 });
+
+poiSchema.index({ pos: '2dsphere' });
+
 // Create the model from the schema and export it
 module.exports = mongoose.model('Poi', poiSchema);
