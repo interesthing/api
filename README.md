@@ -15,11 +15,19 @@ The documentation of the API is available at the index page of the app.
 
 Websocket is implemented for the real-time component. An insight message is generated on every post and delete for ratings, points of intereste & users. The message format is generated in JSON, like this : 
 
-```{
+```
+{
   "TotalUser": 2,
   "TotalPoi": 9,
   "TotalRating": 0
-}```
+}
+```
 
-The websocket service is available at this URL : ```ws://{PATH_to_the_application}``` 
-For example, if you work on your machine, the path should be like this : ```ws://localhost:3000/```
+The websocket service is available at this URL : 
+```
+ws://{PATH_to_the_application}
+``` 
+For example, if you work on your machine, the path should be like this : 
+```
+ws://localhost:3000/
+```
