@@ -154,7 +154,17 @@ router.get('/', function(req, res, next) {
 
 router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
 
-    new Poi(req.body).save(function(err, savedPoi) {
+
+    new Poi(
+    	{
+        "pos" : req.body.pos,
+        "photos": req.body.photos,
+        "postedBy": req.params.id,
+        "title": req.body.title,
+        "description": req.body.description,
+        "categorie": req.body.categorie
+    
+    }).save(function(err, savedPoi) {
 
     if (err) {
       return next(err);
