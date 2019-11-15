@@ -116,8 +116,6 @@ router.get('/:id', loadUserFromParams, function(req, res, next) {
  res.send(req.user);
 });
 
-/* POST ROUTES */
-
 /**
  * @api {post} /api/users Create user
  * @apiName CreateUser
@@ -294,7 +292,7 @@ router.put('/:id', authenticate, loadUserFromParams, function(req, res, next){
  * @apiDescription Partially update a user.
  *
  * @apiExample Example
- *     PATCH /api/people/58b2926f5e1def0123e97bc0 HTTP/1.1
+ *     PATCH /api/user/58b2926f5e1def0123e97bc0 HTTP/1.1
  *     Content-Type: application/json
  *
  *     {
