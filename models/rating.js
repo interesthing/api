@@ -6,13 +6,13 @@ const ratingSchema = new Schema({
   postedBy: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User',
-    unique: true,
-    required: true
+    required: false
   },
   poi: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Poi',
-    required: true
+    required: false
+
   },
   value: {
   	type: Number, // Type validation
