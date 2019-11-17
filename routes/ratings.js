@@ -181,7 +181,7 @@ router.get('/:id', loadRateFromParams, function(req, res, next) {
  */
 router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
 
-   new Rate(
+  new Rate(
     {
       "postedBy" : req.params.id,
       "poi" : req.body.id,
