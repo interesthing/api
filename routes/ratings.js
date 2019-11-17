@@ -181,19 +181,22 @@ router.get('/:id', loadRateFromParams, function(req, res, next) {
  */
 router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
 
-  new Rate(req.body).save(function(err, savedRate) {
+   new Rate(
+    {
+      "postedBy" : req.params.id,
+      "poi" : req.body.id,
+      "value" : req.body.value,
+      "comment" : req.body.comment
+    }).save(function(err, savedRate) {
+    
     if (err) {
       return next(err);
     }
-    
-    notifyCount();
-    
+
     res
       .status(201)
-      // Rajouter le ${config.baseUrl} //
-      .set('Location', `/ratings/${savedRate._id}`)
+      .set('Location', `http://localhost:3000/ratings/${savedRate._id}`)
       .send(savedRate);
-
     });
   });
 
@@ -245,6 +248,8 @@ router.patch('/:id', authenticate, loadRateFromParams, function(req, res, next) 
     res.send(modifiedRate);
   });
 });
+
+
 
 /**
  * @api {delete} /api/rating/:id Delete rating
