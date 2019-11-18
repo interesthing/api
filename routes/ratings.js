@@ -184,7 +184,7 @@ router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
   new Rate(
     {
       "postedBy" : req.params.id,
-      "poi" : req.body.id,
+      "poi" : req.body.poi,
       "value" : req.body.value,
       "comment" : req.body.comment
     }).save(function(err, savedRate) {
