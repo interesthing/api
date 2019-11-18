@@ -6,18 +6,12 @@ const User = require('../models/user');
 const secretKey = process.env.SECRET_KEY || 'changeme';
 const { notifyCount } = require('../dispatcher');
 
-<<<<<<< HEAD
-=======
-/* Middlewares */
-
-// Middleware to get user's informations
->>>>>>> f6a0708f9b65401436108fd57438d6f05b09d871
 function loadUserFromParams(req, res, next) {
   User.findById(req.params.id).exec(function(err, user) {
     if (err) {
       return next(err);
     } else if (!user) {
-      return res.status(404).send('No user found for ID: ' + req.params.id);
+      return res.status(404).send('Aucun utilisateur trouvé pour l\'ID : ' + req.params.id);
     }
     req.user = user;
     next();
@@ -28,23 +22,19 @@ function authenticate(req, res, next) {
 
   const authorization = req.get('Authorization');
   if (!authorization) {
-    return res.status(401).send('The authorization header is missing.');
+    return res.status(401).send('Le header d\'autorisation est manquant.');
   }
 
-<<<<<<< HEAD
-=======
-  // Header correct format 
->>>>>>> f6a0708f9b65401436108fd57438d6f05b09d871
   const match = authorization.match(/^Bearer (.+)$/);
   if (!match) {
-    return res.status(401).send('Authorization header is not a bearer token.');
+    return res.status(401).send('Le header d\'autorisation n\est pas au bon format (bearer token)');
   }
 
   const token = match[1];
 
   jwt.verify(token, secretKey, function(err, payload) {
     if (err) {
-      return res.status(401).send('Your token(JSONwebtoken) is invalid or has expired.');
+      return res.status(401).send('Votre token(JsonWebToken) est invalide ou a expiré.');
     } else {
       req.currentUserId = payload.sub;
       next(); 
@@ -126,9 +116,7 @@ router.get('/', function(req, res, next) {
  *     }
  */
 router.get('/:id', loadUserFromParams, function(req, res, next) {
-
  res.send(req.user);
-
 });
 
 /**
@@ -252,12 +240,7 @@ router.post('/login', function(req, res, next) {
 
 	      jwt.sign(claims, secretKey, function(err, token){
 		        if (err) { return next(err); }
-<<<<<<< HEAD
 			        res.send({ token: token });
-=======
-
-			    res.send({ token: token });
->>>>>>> f6a0708f9b65401436108fd57438d6f05b09d871
 		    });
 	    });
   	})
@@ -301,12 +284,8 @@ router.post('/login', function(req, res, next) {
  */
 router.put('/:id', authenticate, loadUserFromParams, function(req, res, next){
 
-<<<<<<< HEAD
-=======
-	// Authorization control : the user can only modify himself
->>>>>>> f6a0708f9b65401436108fd57438d6f05b09d871
     if (req.currentUserId !== req.user._id.toString()){
-      return res.status(403).send('You must have created this rating to modify it. (PUT)')
+      return res.status(403).send('Vous n\'avez pas le droit de modification(PUT) sur cette ressource.')
     }
 
 	const plainPassword = req.body.password;
@@ -369,18 +348,12 @@ router.put('/:id', authenticate, loadUserFromParams, function(req, res, next){
 router.patch('/:id', authenticate, loadUserFromParams, function(req, res, next) {
 
     if (req.currentUserId !== req.user._id.toString()){
-      return res.status(403).send('You must have created this rating to modify it. (PATCH)')
+      return res.status(403).send('Vous n\'avez pas le droit de modification partielle (PATCH) sur cette ressource.')
     }
 	
-<<<<<<< HEAD
 	if (req.body.username !== undefined) {
 		req.user.username = req.body.username;
 	}
-=======
-	  if (req.body.username !== undefined) {
-	    req.user.username = req.body.username;
-	  }
->>>>>>> f6a0708f9b65401436108fd57438d6f05b09d871
 
 	if (req.body.email !== undefined) {
 		req.user.email = req.body.email;
@@ -438,7 +411,7 @@ router.patch('/:id', authenticate, loadUserFromParams, function(req, res, next) 
 router.delete('/:id', authenticate, loadUserFromParams, function(req, res, next) {
 	
     if (req.currentUserId !== req.user._id.toString()){
-      return res.status(403).send('You must have created this rating to delete it.')
+      return res.status(403).send('Vous n\'avez pas le droit de suppression (DELETE) sur cette ressource.')
     }
 	
   	req.user.remove(function(err) {
