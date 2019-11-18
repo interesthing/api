@@ -290,30 +290,34 @@ router.delete('/:id', authenticate, loadRateFromParams, function(req, res, next)
   });
 });
 
+
 /**
  * @apiDefine RatingIdInUrlPath
- * @apiParam (URL path parameters) {String} id The unique rating identifier to retrieve
+ * @apiParam (URL path parameters) {String} id Rating identifier to retrieve
  */
+
 
 /**
  * @apiDefine RatingInRequestBody
- * @apiParam (Request body) {ObjectId} _id The id of the rating
+ * @apiParam (Request body) {ObjectId} _id Rating identifier
  * @apiParam (Request body) {ObjectId} postedBy The user who rate for this poi (must be unique)
- * @apiParam (Request body) {ObjectId} poi The poi of the user (must be unique)
- * @apiParam (Request body) {Number} value The value of the rate
- * @apiParam (Request body) {String} comment The comment posted user
- * @apiParam (Request body) {Date} dateAdd The rating posted date 
+ * @apiParam (Request body) {ObjectId} poi Poi posted by user (must be unique)
+ * @apiParam (Request body) {Number} value Rate value
+ * @apiParam (Request body) {String} comment Comment posted by user
+ * @apiParam (Request body) {Date} dateAdd Rating poste date 
  */
+
 
 /**
  * @apiDefine RatingInResponseBody
- * @apiParam (Response body) {ObjectId} _id The id of the rating
+ * @apiParam (Response body) {ObjectId} _id Rating identifier
  * @apiParam (Response body) {ObjectId} postedBy The user who rate for this poi (must be unique)
- * @apiParam (Response body) {ObjectId} poi The poi of the user (must be unique)
- * @apiParam (Response body) {Number} value The value of the rate
- * @apiParam (Response body) {String} comment The comment posted for the user
- * @apiParam (Response body) {Date} dateAdd The rating posted date 
+ * @apiParam (Response body) {ObjectId} poi Poi posted by user (must be unique)
+ * @apiParam (Response body) {Number} value Rate value
+ * @apiParam (Response body) {String} comment Comment posted by user
+ * @apiParam (Response body) {Date} dateAdd Rating poste date
  */
+
 
 /**
  * @apiDefine RatingNotFoundError
@@ -327,10 +331,12 @@ router.delete('/:id', authenticate, loadRateFromParams, function(req, res, next)
  *     No rate found with ID 5dc3efdb8f3f0a0e72086293
  */
 
+
  /**
  * @apiDefine RatingIdInUrlPath
  * @apiParam (URL path parameters) {String} _id The unique identifier of the rate to retrieve
  */
+
 
 /**
  * @apiDefine RatingValidationError
