@@ -47,7 +47,7 @@ const poiSchema = new Schema({
   },
   categorie: {
     type: String,
-    enum: ['Art', 'Funny', 'WTF!', 'Spots', 'Shortcuts' ]
+    enum: ['Art', 'Funny', 'WTF!', 'Spots', 'Shortcuts']
   }
 
 });

@@ -599,7 +599,7 @@ router.put('/:id', authenticate, loadPoisFromParams, function(req, res, next) {
  * @apiParam (Response body) {String} title The poi title
  * @apiParam (Response body) {String} description The poi description
  * @apiParam (Response body) {Date} title The poi posted date
- * @apiParam (Response body) {String} categorie The poi category
+ * @apiParam (Response body) {String} categorie The poi category (must be 'Art', 'Funny', 'WTF!', 'Spots', 'Shortcuts')
  */
 
 /**
