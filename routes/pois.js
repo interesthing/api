@@ -124,7 +124,8 @@ function loadUserFromParams(req, res, next) {
  *       }
  *   ]
  */
-/* agrégation faites 
+
+ /* agrégation faites 
 PAGINATION à faire ! */
 router.get('/', function(req, res, next) {
 

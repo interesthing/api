@@ -49,7 +49,6 @@ const poiSchema = new Schema({
     type: String,
     enum: ['Art', 'Funny', 'WTF!', 'Spots', 'Shortcuts']
   }
-
 });
 
 poiSchema.index({ pos: '2dsphere' });
