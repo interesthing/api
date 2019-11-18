@@ -58,7 +58,7 @@ function authenticate(req, res, next) {
  * @apiSuccessExample 200 OK
  *     HTTP/1.1 200 OK
  *     Content-Type: application/json
- *     Link: http://localhost:3000/user
+ *     Link: http://localhost:3000/users
  *
  *     [
  *       {
@@ -146,7 +146,7 @@ router.get('/:id', loadUserFromParams, function(req, res, next) {
  * @apiSuccessExample 201 Created
  *     HTTP/1.1 201 Created
  *     Content-Type: application/json
- *     Location: http://localhost:3000/user/5dc3ef678f3f0a0e72086292
+ *     Location: http://localhost:3000/users/5dc3ef678f3f0a0e72086292
  *
  *     {
  *       "_id": "5dc3ef678f3f0a0e72086292",
