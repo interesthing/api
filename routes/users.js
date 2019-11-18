@@ -283,7 +283,6 @@ router.post('/login', function(req, res, next) {
  *     }
  */
 router.put('/:id', authenticate, loadUserFromParams, function(req, res, next){
-
     if (req.currentUserId !== req.user._id.toString()){
       return res.status(403).send('Vous n\'avez pas le droit de modification(PUT) sur cette ressource.')
     }
