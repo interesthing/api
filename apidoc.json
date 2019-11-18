@@ -1,7 +1,7 @@
 {
-  "name": "Interesthing Api REST",
+  "name": "Documentation Interesthing Api REST",
   "version": "1.0.0",
-  "description": "A nice project for ArchioWeb HEIG-VD course",
-  "title": "Interesthing Api REST",
+  "description": "A project for ArchioWeb course",
+  "title": "Documentation Interesthing Api REST",
   "url" : "http://localhost:3000"
 }
