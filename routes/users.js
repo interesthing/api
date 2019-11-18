@@ -8,13 +8,13 @@ const { notifyCount } = require('../dispatcher');
 
 /* Middlewares */
 
-// Middleware to get some user information
+// Middleware to get user's informations
 function loadUserFromParams(req, res, next) {
   User.findById(req.params.id).exec(function(err, user) {
     if (err) {
       return next(err);
     } else if (!user) {
-      return res.status(404).send('Aucun utilisateur trouvé pour l\'ID : ' + req.params.id);
+      return res.status(404).send('No user found for ID: ' + req.params.id);
     }
     req.user = user;
     next();
@@ -27,20 +27,20 @@ function authenticate(req, res, next) {
   // Control if header is present 
   const authorization = req.get('Authorization');
   if (!authorization) {
-    return res.status(401).send('Le header d\'autorisation est manquant.');
+    return res.status(401).send('The authorization header is missing.');
   }
 
-  // Header good format control
+  // Header correct format 
   const match = authorization.match(/^Bearer (.+)$/);
   if (!match) {
-    return res.status(401).send('Le header d\'autorisation n\est pas au bon format (bearer token)');
+    return res.status(401).send('Authorization header is not a bearer token.');
   }
 
   // Extract and verify the JWT
   const token = match[1];
   jwt.verify(token, secretKey, function(err, payload) {
     if (err) {
-      return res.status(401).send('Votre token(JsonWebToken) est invalide ou a expiré.');
+      return res.status(401).send('Your token(JSONwebtoken) is invalid or has expired.');
     } else {
       req.currentUserId = payload.sub;
       // Send the authenticate user id to the next middleware
@@ -171,7 +171,6 @@ router.post('/', function(req, res, next) {
 
 		    notifyCount(); 
 		    res.status(201)
-		      	// Add ${config.baseUrl} //
 		      	.set('Location', `/users/${savedUser._id}`)
 		      	.send(savedUser);
 	  	});
@@ -209,9 +208,8 @@ router.post('/login', function(req, res, next) {
 
 	      jwt.sign(claims, secretKey, function(err, token){
 		        if (err) { return next(err); }
-			        // Send client token
-			        // res.send(`token : ${token} !`);
-			        res.send({ token: token });
+
+			    res.send({ token: token });
 		    });
 	    });
   	})
@@ -251,11 +249,9 @@ router.post('/login', function(req, res, next) {
  */
 router.put('/:id', authenticate, loadUserFromParams, function(req, res, next){
 
-	// const currentUserId = req.currentUserId;
-
 	// Authorization control : the user can only modify himself
     if (req.currentUserId !== req.user._id.toString()){
-      return res.status(403).send('Vous n\'avez pas le droit de modification(PUT) sur cette ressource.')
+      return res.status(403).send('You must have created this rating to modify it. (PUT)')
     }
 
     // Config bcrypt
@@ -314,12 +310,10 @@ router.put('/:id', authenticate, loadUserFromParams, function(req, res, next){
  */
 router.patch('/:id', authenticate, loadUserFromParams, function(req, res, next) {
 
-	// Contrôle des autorisations : l'utilisateur ne peut que modifier ses informations propres.
     if (req.currentUserId !== req.user._id.toString()){
-      return res.status(403).send('Vous n\'avez pas le droit de modification partielle (PATCH) sur cette ressource.')
+      return res.status(403).send('You must have created this rating to modify it. (PATCH)')
     }
 	
-	// Mets à jour l'utilisateur en fonction des params présents ou non dans req.body 
 	  if (req.body.username !== undefined) {
 	    req.user.username = req.body.username;
 	  }
@@ -379,9 +373,8 @@ router.patch('/:id', authenticate, loadUserFromParams, function(req, res, next) 
  */
 router.delete('/:id', authenticate, loadUserFromParams, function(req, res, next) {
 	
-	// Contrôle des autorisations : l'utilisateur ne peut que se modifier lui-même
     if (req.currentUserId !== req.user._id.toString()){
-      return res.status(403).send('Vous n\'avez pas le droit de suppression (DELETE) sur cette ressource.')
+      return res.status(403).send('You must have created this rating to delete it.')
     }
 	
   	req.user.remove(function(err) {

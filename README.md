@@ -4,8 +4,10 @@ Interesthing is a RESTful API implemented with [Express][express]. The goal of t
 
 * **log in** to the API
 * **post** some points of interest (POI)
-* **see** all of the points of interest
-* **rate** the other points of interest
+* **see** all of the points of interest (POI)
+* **rate** the other points of interest (POI)
+
+Visit this [links][doc] for an app demo. 
 
 ## Requirements
 
@@ -50,8 +52,10 @@ For example, if you work on your machine, the path should be like this :
 ```
 ws://localhost:3000/
 ```
+If you want to test this service, you can use this [webservice][ws].
 
 [express]: https://expressjs.com
 [mongo]: https://www.mongodb.com
 [node]: https://nodejs.org/
 [doc]: https://interesthing.herokuapp.com/
+[ws]: https://msg-central.herokuapp.com/ws
