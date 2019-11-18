@@ -123,7 +123,7 @@ function loadUserFromParams(req, res, next) {
  *           "averageRating": 4
  *       }
  *   ]
- */
+ /*
 
  /* agrégation faites 
 PAGINATION à faire ! */
@@ -264,6 +264,7 @@ router.get('/', function(req, res, next) {
  *           "averageRating": 6
  *       }
  */
+
 router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
 
     new Poi(
