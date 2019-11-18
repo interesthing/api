@@ -132,7 +132,7 @@ router.get('/', function(req, res, next) {
  *       "_id": "5dc3efdb8f3f0a0e72086293",
  *       "postedBy": "5dc2e88f7f63bc03bb1c04c1",
  *       "poi": "5dc2eb36a151100485fe431b",
- *       "value": 6,
+ *       "value": 4,
  *       "comment": "Lorem ipsum dolor sit amet",
  *       "dateAdd": "2019-11-07T10:20:11.632Z",
  *       "__v": 0
@@ -160,7 +160,7 @@ router.get('/:id', loadRateFromParams, function(req, res, next) {
  *     {
  *	      "postedBy" : "5dc3ef678f3f0a0e72086292",
  *	      "poi" : "5dc3dd4996488c0c8fce006d",
- *	      "value" : "6",
+ *	      "value" : 4,
  *	      "comment" : "Lorem ipsum dolor sit amet"
  *     }
  *
@@ -173,7 +173,7 @@ router.get('/:id', loadRateFromParams, function(req, res, next) {
  *       "_id": "5dc3efdb8f3f0a0e72086293",
  *       "postedBy": "5dc3ef678f3f0a0e72086292",
  *       "poi": "5dc3dd4996488c0c8fce006d",
- *       "value": 6,
+ *       "value": 4,
  *       "comment": "Lorem ipsum dolor sit amet",
  *       "dateAdd": "2019-11-07T10:20:11.632Z",
  *       "__v": 0
@@ -226,7 +226,7 @@ router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
  *      "_id": "58b2926f5e1def0123e97bc0",
  *      "postedBy": "5dc2e88f7f63bc03bb1c04c1",
  *      "poi": "5dc2eb36a151100485fe431b",
- *      "value": 6,
+ *      "value": 4,
  *      "comment": "Lorem ipsum dolor sit amet",
  *      "dateAdd": "2019-11-07T10:20:11.632Z",
  *      "__v": 1
