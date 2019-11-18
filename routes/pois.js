@@ -111,8 +111,8 @@ function loadUserFromParams(req, res, next) {
  *           "postedBy": "5dc03e63473ae2089f8bc480",
  *           "pos": {
  *               "coordinates": [
- *                   3,
- *                   4
+ *                   47.782152, 
+ *                   6.644157,
  *               ],
  *               "type": "Point"
  *           },
