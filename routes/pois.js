@@ -91,8 +91,8 @@ function loadUserFromParams(req, res, next) {
  *           "postedBy": "5dc03e63473ae2089f8bc480",
  *           "pos": {
  *               "coordinates": [
- *                   3,
- *                   4
+ *                   46.781142, 
+ *                   6.647189,
  *               ],
  *               "type": "Point"
  *           },
@@ -110,8 +110,8 @@ function loadUserFromParams(req, res, next) {
  *           "postedBy": "5dc03e63473ae2089f8bc480",
  *           "pos": {
  *               "coordinates": [
- *                   3,
- *                   4
+ *                   47.782152, 
+ *                   6.644157,
  *               ],
  *               "type": "Point"
  *           },
@@ -122,8 +122,7 @@ function loadUserFromParams(req, res, next) {
  *           "averageRating": 4
  *       }
  *   ]
- */
-
+*/
 router.get('/', function(req, res, next) {
 
 	  let page = parseInt(req.query.page, 10);
@@ -221,8 +220,8 @@ router.get('/', function(req, res, next) {
  *     {
  *       "pos": {
  *           "coordinates": [
- *               1,
- *               2
+ *               46.781142, 
+ *               6.647189,
  *           ],
  *           "type": "Point"
  *       },
@@ -248,8 +247,8 @@ router.get('/', function(req, res, next) {
  *           "postedBy": "5dc2e88f7f63bc03bb1c04c1",
  *           "pos": {
  *               "coordinates": [
- *                   1,
- *                   2
+ *                   46.781142, 
+ *                   6.647189,
  *               ],
  *               "type": "Point"
  *           },
@@ -260,6 +259,7 @@ router.get('/', function(req, res, next) {
  *           "averageRating": 6
  *       }
  */
+
 router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
 
     new Poi(
@@ -312,8 +312,8 @@ router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
  *           "postedBy": "5dc03e63473ae2089f8bc480",
  *           "pos": {
  *               "coordinates": [
- *                   3,
- *                   4
+ *                   46.781142, 
+ *                   6.647189,
  *               ],
  *               "type": "Point"
  *           },
@@ -444,8 +444,8 @@ router.delete('/:id', authenticate, loadPoisFromParams, function(req, res, next)
  *           "postedBy": "5dc03e63473ae2089f8bc480",
  *           "pos": {
  *               "coordinates": [
- *                   3,
- *                   4
+ *                   46.781142, 
+ *                   6.647189,
  *               ],
  *               "type": "Point"
  *           },
@@ -500,8 +500,8 @@ router.patch('/:id', authenticate, loadPoisFromParams, function(req, res, next) 
  *       {
  *       "pos": {
  *           "coordinates": [
- *               3,
- *               4
+ *               46.781142, 
+ *               6.647189,
  *           ],
  *           "type": "Point"
  *       },
@@ -531,8 +531,8 @@ router.patch('/:id', authenticate, loadPoisFromParams, function(req, res, next) 
  *           "postedBy": "5dc2e88f7f63bc03bb1c04c1",
  *           "pos": {
  *               "coordinates": [
- *                   3,
- *                   4
+ *                   46.781142, 
+ *                   6.647189,
  *               ],
  *               "type": "Point"
  *           },

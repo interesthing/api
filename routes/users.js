@@ -279,7 +279,6 @@ router.put('/:id', authenticate, loadUserFromParams, function(req, res, next){
 });
 
 /* PATCH ROUTES */
-
 /**
  * @api {patch} /user/:id Partially update a user
  * @apiName UpdateUser

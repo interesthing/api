@@ -18,7 +18,7 @@ const poiSchema = new Schema({
     type: {
       type: String,
       required: true,
-      enum: [ 'Point' ]
+      enum: ['Point']
     },
     coordinates: {
       type: [Number],
@@ -38,7 +38,7 @@ const poiSchema = new Schema({
   },
   description: {
   	type: String, 
-    minlength: [ 5, 'Description is too short' ], // Minimum length
+    minlength: [5, 'Description is too short'], // Minimum length
     maxlength: [300, 'Description is too long']
   },
   dateAdd: { 
@@ -49,7 +49,6 @@ const poiSchema = new Schema({
     type: String,
     enum: ['Art', 'Funny', 'WTF!', 'Spots', 'Shortcuts']
   }
-
 });
 
 poiSchema.index({ pos: '2dsphere' });

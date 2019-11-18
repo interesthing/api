@@ -12,7 +12,6 @@ const ratingSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Poi',
     required: true
-
   },
   value: {
   	type: Number, // Type validation
