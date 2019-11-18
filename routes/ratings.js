@@ -7,22 +7,22 @@ const { notifyCount } = require('../dispatcher');
 const User = require('../models/user');
 const secretKey = process.env.SECRET_KEY || 'changeme';
 
-/* Les middlewares */
+/* Middlewares */
 
-// Middleware pour récupérer les informations d'un utilisateur 
+// Middleware to retrieve information from an user
 function loadUserFromParams(req, res, next) {
   User.findById(req.params.id).exec(function(err, user) {
     if (err) {
       return next(err);
     } else if (!user) {
-      return res.status(404).send('Aucun utilisateur trouvé pour l\'ID : ' + req.params.id);
+      return res.status(404).send('No user found for ID : ' + req.params.id);
     }
     req.user = user;
     next();
   });
 }
 
-// Middleware GET api/ratings/:id
+// Middleware to retrieve informations from a rate
 function loadRateFromParams(req, res, next) {
   Rate.findById(req.params.id).exec(function(err, rate) {
     if (err) {
@@ -35,30 +35,28 @@ function loadRateFromParams(req, res, next) {
   });
 }
 
-
-// Middleware pour l'authentification
+// Authentication Middleware 
 function authenticate(req, res, next) {
 
-  // Contrôle si le header est présent 
+  // Check if the header is present
   const authorization = req.get('Authorization');
   if (!authorization) {
-    return res.status(401).send('Le header d\'autorisation est manquant.');
+    return res.status(401).send('The authorization header is missing.');
   }
 
-  // Contrôle que le header soit au bon format
+  // Check that the header is in the correct format
   const match = authorization.match(/^Bearer (.+)$/);
   if (!match) {
-    return res.status(401).send('Le header d\'autorisation n\est pas au bon format (bearer token)');
+    return res.status(401).send('Authorization header is not a bearer token.');
   }
 
-  // Extraction et vérification du JWT
+  // Extraction and verification of the JWT
   const token = match[1];
   jwt.verify(token, secretKey, function(err, payload) {
     if (err) {
-      return res.status(401).send('Votre token(JsonWebToken) est invalide ou a expiré.');
+      return res.status(401).send('Your token(JSONwebtoken) is invalid or has expired.');
     } else {
       req.currentUserId = payload.sub;
-      // Passe l'ID de l'utilisateur authentifié au prochain middleware
       next(); 
     }
   });
@@ -243,15 +241,14 @@ router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
  */
 router.patch('/:id', authenticate, loadRateFromParams, function(req, res, next) {
 
-  // Contrôle des autorisations : l'utilisateur doit avoir créer le rating pour le modifier //
   if (req.currentUserId !== req.rate.postedBy.toString()){
-    return res.status(403).send('Vous devez avoir créé ce rating pour le modifier (PATCH).')
+    return res.status(403).send('You must have created this rating to modify it (PATCH).')
   }
 
-	// Met à jour le commentaire du rating en fonction des params présents ou non dans req.body 
   if (req.body.comment !== undefined) {
     req.rate.comment = req.body.comment;
   }
+
   req.rate.save(function(err, modifiedRate) {
     if (err) {
       return next(err);
@@ -276,9 +273,8 @@ router.patch('/:id', authenticate, loadRateFromParams, function(req, res, next) 
  */
 router.delete('/:id', authenticate, loadRateFromParams, function(req, res, next) {
 
-  // Contrôle des autorisations : l'utilisateur doit avoir créer le rating pour le modifier //
   if (req.currentUserId !== req.rate.postedBy.toString()){
-    return res.status(403).send('Vous devez avoir créé ce rating pour le supprimer.')
+    return res.status(403).send('You must have created this rating to delete it.')
   }
   
   req.rate.remove(function(err) {
