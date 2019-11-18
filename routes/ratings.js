@@ -261,8 +261,6 @@ router.patch('/:id', authenticate, loadRateFromParams, function(req, res, next) 
   });
 });
 
-
-
 /**
  * @api {delete} /api/rating/:id Delete rating
  * @apiName DeleteRating
