@@ -240,7 +240,7 @@ router.post('/login', function(req, res, next) {
 
 	      jwt.sign(claims, secretKey, function(err, token){
 		        if (err) { return next(err); }
-			        res.send({ token: token });
+			        res.send({ token: token, user });
 		    });
 	    });
   	})
