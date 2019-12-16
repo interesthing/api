@@ -175,7 +175,16 @@ router.get('/', function(req, res, next) {
       },
       {
         $limit: pageSize
-      }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'postedBy',
+          foreignField: '_id',
+          as: 'postedByUsername'
+        }
+      },
+
       ],
       (err, poiSort) => {
       if (err) {
@@ -190,6 +199,7 @@ router.get('/', function(req, res, next) {
         const serialized = new Poi(poi).toJSON();
 
         serialized.averageRating = poi.averageRating;
+        serialized.postedByUsername = poi.postedByUsername;
 
         return serialized;
       });
