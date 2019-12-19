@@ -373,9 +373,18 @@ router.get('/:id', loadPoisFromParams, function(req, res, next) {
           description: { "$first": '$description' }, 
           dateAdd: { "$first": '$dateAdd' }, 
           categorie: { "$first": '$categorie' }, 
-          averageRating: { $avg: "$ratingPoi.value" }
+          averageRating: { $avg: "$ratingPoi.value" },
+          totalRating: { $sum: 1 },
         }
+      },
+      {
+      $lookup: {
+        from: 'users',
+        localField: 'postedBy',
+        foreignField: '_id',
+        as: 'postedByUsername'
       }
+    }
       ],
       (err, poiWithRating) => {
       if (err) {
@@ -387,6 +396,9 @@ res.send(poiWithRating.map(poi => {
         const serialized = new Poi(poi).toJSON();
 
         serialized.ratingPoi = poi.averageRating;
+        serialized.postedByUsername = poi.postedByUsername;
+        serialized.totalRating = poi.totalRating;
+
 
         return serialized;
       }));
