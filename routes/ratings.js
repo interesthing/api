@@ -215,6 +215,8 @@ router.post('/:id', authenticate, loadUserFromParams, function(req, res, next) {
     if (err) {
       return next(err);
     }
+    
+    notifyCount();
 
     res
       .status(201)
